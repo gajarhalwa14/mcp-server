@@ -1,50 +1,57 @@
 # TODO — MCP Server Implementation
 
 ## 1. Project scaffolding
-- [ ] **Initial Node/TypeScript setup**
-  - [ ] Initialise `package.json` with name, version, `type: module`, and `main` pointing at `build/server.js`.
-  - [ ] Add `tsconfig.json` targeting Node ≥ 18 with ES module output and strict type-checking.
-  - [ ] Add `.gitignore` (ignore `node_modules`, `build`, `.env`, SQLite files used only for tests/fixtures, etc.).
-- [ ] **Install core runtime dependencies**
-  - [ ] `@modelcontextprotocol/sdk`
-  - [ ] `zod`
-  - [ ] `better-sqlite3`
-  - [ ] `dotenv`
-- [ ] **Install development dependencies**
-  - [ ] `typescript`
-  - [ ] `tsx` (or `ts-node`, choose one and standardise)
-  - [ ] Test runner: `vitest` (or `jest`, choose one and standardise)
-  - [ ] `@types/node`
-  - [ ] `eslint` + `@typescript-eslint/eslint-plugin` + `@typescript-eslint/parser`
-  - [ ] `prettier` (and optional eslint-prettier integration)
-- [ ] **Top-level project files**
-  - [ ] Create initial `README.md` with short description and basic usage.
-  - [ ] Ensure `SPEC.md` and `ARCHITECTURE.md` are linked from `README.md` (for discoverability).
+- [x] **Initial Node/TypeScript setup**
+  - [x] Initialise `package.json` with name, version, `type: module`, and `main` pointing at `build/server.js`.
+  - [x] Add `tsconfig.json` targeting Node ≥ 18 with ES module output and strict type-checking.
+  - [x] Add `.gitignore` (ignore `node_modules`, `build`, `.env`, SQLite files used only for tests/fixtures, etc.).
+- [x] **Install core runtime dependencies**
+  - [x] `@modelcontextprotocol/sdk`
+  - [x] `zod`
+  - [x] `better-sqlite3`
+  - [x] `dotenv`
+- [x] **Install development dependencies**
+  - [x] `typescript`
+  - [x] `tsx` (or `ts-node`, choose one and standardise)
+  - [x] Test runner: `vitest` (or `jest`, choose one and standardise)
+  - [x] `@types/node`
+  - [x] `eslint` + `@typescript-eslint/eslint-plugin` + `@typescript-eslint/parser`
+  - [x] `prettier` (and optional eslint-prettier integration)
+- [x] **Top-level project files**
+  - [x] Create initial `README.md` with short description and basic usage.
+  - [x] Ensure `SPEC.md` and `ARCHITECTURE.md` are linked from `README.md` (for discoverability).
+- [x] **Scaffolding verification & tests**
+  - [x] Run `npm run lint` and `npm run test` (after basic wiring) to verify tooling is correctly configured.
+  - [x] Run `npm run build` and `npm run dev` to ensure TypeScript compilation and runtime entry points work end-to-end.
 
 ## 2. Configuration layer (`src/config`)
-- [ ] **Create directory structure**
-  - [ ] Create `src/` and subdirectories: `tools`, `resources`, `prompts`, `transport`, `config`, `utils`.
-- [ ] **Environment configuration (`env.ts`)**
-  - [ ] Implement `src/config/env.ts` that:
-    - [ ] Loads `.env` via `dotenv` in development (but is safe/no-op in production if `.env` is absent).
-    - [ ] Defines a Zod schema for all environment variables listed in `SPEC.md`:
-      - [ ] `MCP_TRANSPORT` (`stdio` | `http`, default `stdio`)
-      - [ ] `PORT` (number, default `3000`, only used when HTTP transport enabled)
-      - [ ] `LOG_LEVEL` (`debug` | `info` | `warn` | `error`, default `info`)
-      - [ ] `ALLOWED_DIRS` (required, comma-separated absolute paths)
-      - [ ] `MAX_FILE_BYTES` (default `1048576`)
-      - [ ] `SQLITE_MAX_ROWS` (default `500`)
-      - [ ] `QUERY_TIMEOUT_MS` (default `10000`)
-    - [ ] Validates env at startup; if invalid/missing required values, throws a descriptive error and prevents server from starting.
-    - [ ] Exports a strongly typed `config` object used elsewhere.
-- [ ] **Static constants (`constants.ts`)**
-  - [ ] Implement `src/config/constants.ts` for shared constants:
-    - [ ] Default log level strings.
-    - [ ] Default limits that may be re-used in tests and runtime.
-    - [ ] Any shared identifiers for resources (e.g. `CONFIG_RESOURCE_URI = "config://server"`).
-- [ ] **.env templates**
-  - [ ] Create `.env.example` showcasing all relevant variables with safe example values.
-  - [ ] Ensure `.env` is gitignored and used only locally.
+- [x] **Create directory structure**
+  - [x] Create `src/` and subdirectories: `tools`, `resources`, `prompts`, `transport`, `config`, `utils`.
+- [x] **Environment configuration (`env.ts`)**
+  - [x] Implement `src/config/env.ts` that:
+    - [x] Loads `.env` via `dotenv` in development (but is safe/no-op in production if `.env` is absent).
+    - [x] Defines a Zod schema for all environment variables listed in `SPEC.md`:
+      - [x] `MCP_TRANSPORT` (`stdio` | `http`, default `stdio`)
+      - [x] `PORT` (number, default `3000`, only used when HTTP transport enabled)
+      - [x] `LOG_LEVEL` (`debug` | `info` | `warn` | `error`, default `info`)
+      - [x] `ALLOWED_DIRS` (required, comma-separated absolute paths)
+      - [x] `MAX_FILE_BYTES` (default `1048576`)
+      - [x] `SQLITE_MAX_ROWS` (default `500`)
+      - [x] `QUERY_TIMEOUT_MS` (default `10000`)
+    - [x] Validates env via a Zod schema and throws a descriptive error when invalid.
+    - [x] Exports a strongly typed `loadConfig` helper to be used at server startup.
+- [x] **Static constants (`constants.ts`)**
+  - [x] Implement `src/config/constants.ts` for shared constants:
+    - [x] Default log level strings.
+    - [x] Default limits that may be re-used in tests and runtime.
+    - [x] Any shared identifiers for resources (e.g. `CONFIG_RESOURCE_URI = "config://server"`).
+- [x] **.env templates**
+  - [x] Create `.env.example` showcasing all relevant variables with safe example values.
+  - [x] Ensure `.env` is gitignored and used only locally.
+- [x] **Configuration testing**
+  - [x] Add unit tests for `env.ts` (valid config, missing required env, invalid values yield clear errors).
+  - [x] Add unit tests for any helper functions in `constants.ts` (if present).
+  - [x] Use integration tests to confirm misconfiguration prevents server start and produces descriptive log output.
 
 ## 3. Shared utilities (`src/utils`)
 - [ ] **Logger (`logger.ts`)**
@@ -74,6 +81,11 @@
     - [ ] Applies a `QUERY_TIMEOUT_MS` timeout (cancel or abort long-running queries).
     - [ ] Enforces the `SQLITE_MAX_ROWS` limit, truncating results and signalling when truncation occurs.
   - [ ] Exposes a simple API for running parameterised SELECT queries and returning rows + metadata.
+ - [ ] **Utilities testing**
+  - [ ] Add unit tests for `logger.ts` (log level filtering, stderr-only behaviour, structured payload shape).
+  - [ ] Add unit tests for `errors.ts` to ensure each error maps to the expected code/message structure.
+  - [ ] Add unit tests for `path-guard.ts` (allowed vs disallowed dirs, symlink resolution, edge cases).
+  - [ ] Add unit tests for `sqlite-client.ts` (SELECT-only enforcement, timeout behaviour, row limit enforcement).
 
 ## 4. Tool implementations (`src/tools`)
 - [ ] **Tools index (`index.ts`)**
@@ -146,6 +158,9 @@
   - [ ] Implement the `query-and-explain` prompt template that:
     - [ ] Guides the model to call `query_sqlite`, optionally multiple times.
     - [ ] Instructs the model to explain results in plain language and highlight insights or comparisons.
+ - [ ] **Prompt testing**
+  - [ ] Add lightweight unit tests or snapshot tests to ensure prompt templates render correctly given parameters.
+  - [ ] Manually exercise prompts via MCP Inspector to validate they guide the model toward correct tool usage.
 
 ## 7. Transport layer (`src/transport`)
 - [ ] **STDIO transport (`stdio.ts`)**
@@ -160,6 +175,9 @@
     - [ ] Enforces CORS rules (configurable allowlist or sane defaults).
     - [ ] Implements basic rate limiting (IP or token bucket, as appropriate).
     - [ ] Supports streaming responses via SSE per MCP spec.
+ - [ ] **Transport testing**
+  - [ ] Add unit tests for STDIO transport wiring where feasible (e.g. correct `McpServer` attachment).
+  - [ ] Add HTTP transport tests (or integration tests) that verify CORS headers, basic rate limiting, and streaming behaviour.
 
 ## 8. Server entry point (`src/server.ts`)
 - [ ] **Server creation and wiring**
@@ -171,11 +189,27 @@
   - [ ] Ensure unexpected exceptions are caught at the top level and translated into JSON-RPC error responses.
   - [ ] Prevent the process from crashing on a single bad request.
   - [ ] Ensure server exits early with clear logs on configuration errors.
+ - [ ] **Server entry testing**
+  - [ ] Cover server wiring and error handling via integration tests that start the server with different `MCP_TRANSPORT` and config scenarios.
 
 ## 9. Testing (`tests/`)
 - [ ] **Test infrastructure**
   - [ ] Choose and configure test runner (Vitest or Jest) and add `test` script to `package.json`.
   - [ ] Set up TypeScript-aware test config, including path aliases if used.
+- [ ] **Unit tests for config (`tests/config/`)**
+  - [ ] `env.test.ts`:
+    - [ ] Valid environment → returns typed config.
+    - [ ] Missing required variables → throws descriptive validation error.
+    - [ ] Invalid values (e.g. bad `MCP_TRANSPORT`, negative limits) → rejected with clear messages.
+- [ ] **Unit tests for utilities (`tests/utils/`)**
+  - [ ] `logger.test.ts`:
+    - [ ] Logs honour `LOG_LEVEL` thresholds and write only to `stderr`.
+  - [ ] `errors.test.ts`:
+    - [ ] Error instances expose stable codes/messages.
+  - [ ] `path-guard.test.ts`:
+    - [ ] Allowed vs disallowed paths, symlink handling, and relative path resolution.
+  - [ ] `sqlite-client.test.ts`:
+    - [ ] SELECT-only enforcement, timeout, row caps, and parameter binding.
 - [ ] **Unit tests for tools (`tests/tools/`)**
   - [ ] `read-file.test.ts`:
     - [ ] Test allowed vs disallowed paths (`path-guard` integration).
@@ -198,6 +232,11 @@
     - [ ] `query_sqlite`
     - [ ] Resource reads (`config://server`, `schema://sqlite/...`)
   - [ ] Assert on structured responses, including error cases.
+  - [ ] Verify correct logging behaviour (no contamination of STDIO data channel in STDIO mode).
+  - [ ] Verify HTTP mode responses include correct CORS headers and handle rate limiting as configured.
+ - [ ] **Test coverage & robustness**
+  - [ ] Track code coverage and aim for high coverage on tools, resources, config, and utilities.
+  - [ ] Add regression tests when bugs are found to prevent reintroductions.
 
 ## 10. Scripts and developer experience
 - [ ] **Inspector script**
@@ -223,10 +262,14 @@
 ## 12. Optional future extensions (from SPEC)
 - [ ] **Authentication for HTTP transport**
   - [ ] Design how OAuth 2.0 or other auth will be integrated in front of or within the HTTP transport.
+  - [ ] Add unit/integration tests for authenticated HTTP flows (token validation, unauthorised/forbidden responses).
 - [ ] **Persistent caching for resources**
   - [ ] Replace/augment in-memory caching (if added) with Redis or SQLite-based caches.
+  - [ ] Add tests to verify cache correctness, eviction policies, and behaviour under cache misses/hits.
 - [ ] **Tool versioning and dynamic registration**
   - [ ] Add a mechanism for registering multiple versions of a tool and/or dynamically adding/removing tools at runtime.
+  - [ ] Add tests ensuring version selection and dynamic registration behave as expected and remain backward compatible.
 - [ ] **Containerisation and cloud deployment**
   - [ ] Add Dockerfile and deployment docs (e.g. Fly.io, Railway, etc.) once core server is stable.
+  - [ ] Add smoke tests or health-check endpoints that can be exercised in CI/CD pipelines against the container image.
 
