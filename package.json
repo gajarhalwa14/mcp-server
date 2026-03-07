@@ -1,7 +1,7 @@
 {
   "name": "mcp-server",
   "version": "1.0.0",
-  "description": "A Model Context Protocol (MCP) server exposing file, SQLite, and prompt capabilities.",
+  "description": "",
   "type": "module",
   "main": "build/server.js",
   "scripts": {
@@ -29,7 +29,6 @@
     "url": "https://github.com/gajarhalwa14/mcp-server/issues"
   },
   "homepage": "https://github.com/gajarhalwa14/mcp-server#readme",
-  "description": "",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",
     "better-sqlite3": "^12.6.2",
@@ -37,6 +36,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.3.5",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",

@@ -54,83 +54,83 @@
   - [x] Use integration tests to confirm misconfiguration prevents server start and produces descriptive log output.
 
 ## 3. Shared utilities (`src/utils`)
-- [ ] **Logger (`logger.ts`)**
-  - [ ] Implement a logger that:
-    - [ ] Writes structured JSON or key-value logs to `stderr` only (never `stdout`).
-    - [ ] Supports log levels `debug`, `info`, `warn`, `error` driven by `LOG_LEVEL`.
-    - [ ] Provides helpers for logging tool invocations (name, input summary, duration, outcome).
-- [ ] **Error types (`errors.ts`)**
-  - [ ] Implement custom error classes matching the spec:
-    - [ ] `PermissionError`
-    - [ ] `FileTooLargeError`
-    - [ ] `NonSelectQueryError`
-    - [ ] `QueryTimeoutError`
-    - [ ] Generic `ToolExecutionError` and other structured error types as needed.
-  - [ ] Ensure each error type includes a stable error code and human-readable message suitable for JSON-RPC error objects.
-- [ ] **Path guard (`path-guard.ts`)**
-  - [ ] Implement helper that:
-    - [ ] Takes a path (absolute or relative).
-    - [ ] Resolves it (including symlinks) to an absolute path.
-    - [ ] Checks that it is within at least one directory from `ALLOWED_DIRS`.
-    - [ ] Throws `PermissionError` if outside the allowlist before any filesystem access.
-  - [ ] Provide a small API, e.g. `ensurePathAllowed(rawPath: string): string` returning the resolved safe path.
-- [ ] **SQLite client (`sqlite-client.ts`)**
-  - [ ] Implement thin wrapper around `better-sqlite3` that:
-    - [ ] Opens databases in read-only mode.
-    - [ ] Enforces `SELECT`-only queries by examining/normalising the SQL string.
-    - [ ] Applies a `QUERY_TIMEOUT_MS` timeout (cancel or abort long-running queries).
-    - [ ] Enforces the `SQLITE_MAX_ROWS` limit, truncating results and signalling when truncation occurs.
-  - [ ] Exposes a simple API for running parameterised SELECT queries and returning rows + metadata.
- - [ ] **Utilities testing**
-  - [ ] Add unit tests for `logger.ts` (log level filtering, stderr-only behaviour, structured payload shape).
-  - [ ] Add unit tests for `errors.ts` to ensure each error maps to the expected code/message structure.
-  - [ ] Add unit tests for `path-guard.ts` (allowed vs disallowed dirs, symlink resolution, edge cases).
-  - [ ] Add unit tests for `sqlite-client.ts` (SELECT-only enforcement, timeout behaviour, row limit enforcement).
+- [x] **Logger (`logger.ts`)**
+  - [x] Implement a logger that:
+    - [x] Writes structured JSON or key-value logs to `stderr` only (never `stdout`).
+    - [x] Supports log levels `debug`, `info`, `warn`, `error` driven by `LOG_LEVEL`.
+    - [x] Provides helpers for logging tool invocations (name, input summary, duration, outcome).
+- [x] **Error types (`errors.ts`)**
+  - [x] Implement custom error classes matching the spec:
+    - [x] `PermissionError`
+    - [x] `FileTooLargeError`
+    - [x] `NonSelectQueryError`
+    - [x] `QueryTimeoutError`
+    - [x] Generic `ToolExecutionError` and other structured error types as needed.
+  - [x] Ensure each error type includes a stable error code and human-readable message suitable for JSON-RPC error objects.
+- [x] **Path guard (`path-guard.ts`)**
+  - [x] Implement helper that:
+    - [x] Takes a path (absolute or relative).
+    - [x] Resolves it (including symlinks) to an absolute path.
+    - [x] Checks that it is within at least one directory from `ALLOWED_DIRS`.
+    - [x] Throws `PermissionError` if outside the allowlist before any filesystem access.
+  - [x] Provide a small API, e.g. `ensurePathAllowed(rawPath: string): string` returning the resolved safe path.
+- [x] **SQLite client (`sqlite-client.ts`)**
+  - [x] Implement thin wrapper around `better-sqlite3` that:
+    - [x] Opens databases in read-only mode.
+    - [x] Enforces `SELECT`-only queries by examining/normalising the SQL string.
+    - [x] Applies a `QUERY_TIMEOUT_MS` timeout (cancel or abort long-running queries).
+    - [x] Enforces the `SQLITE_MAX_ROWS` limit, truncating results and signalling when truncation occurs.
+  - [x] Exposes a simple API for running parameterised SELECT queries and returning rows + metadata.
+- [x] **Utilities testing**
+  - [x] Add unit tests for `logger.ts` (log level filtering, stderr-only behaviour, structured payload shape).
+  - [x] Add unit tests for `errors.ts` to ensure each error maps to the expected code/message structure.
+  - [x] Add unit tests for `path-guard.ts` (allowed vs disallowed dirs, symlink resolution, edge cases).
+  - [x] Add unit tests for `sqlite-client.ts` (SELECT-only enforcement, timeout behaviour, row limit enforcement).
 
 ## 4. Tool implementations (`src/tools`)
-- [ ] **Tools index (`index.ts`)**
-  - [ ] Implement `src/tools/index.ts` to:
-    - [ ] Export a function that takes an `McpServer` instance and registers all tools.
-    - [ ] Centralise the mapping from tool name to handler.
-- [ ] **`read-file.ts` tool**
-  - [ ] Implement TypeScript definitions:
-    - [ ] Name: `read_file`.
-    - [ ] Description: per `SPEC.md` (file reading, grounded access).
-    - [ ] Zod input schema: `{ path: string }`.
-  - [ ] Handler behaviour:
-    - [ ] Validate input against schema.
-    - [ ] Use `path-guard` to ensure path is inside `ALLOWED_DIRS`.
-    - [ ] Check file existence and size before reading; enforce `MAX_FILE_BYTES`.
-    - [ ] Detect MIME type (simple extension-based mapping is sufficient initially).
-    - [ ] Read file as UTF-8, returning:
-      - [ ] `content: string`
-      - [ ] `size_bytes: number`
-      - [ ] `mime_type: string`
-    - [ ] Map failure conditions to structured errors:
-      - [ ] File not found → 404-style error object.
-      - [ ] Path outside allowlist → `PermissionError`.
-      - [ ] File too large → `FileTooLargeError`.
-    - [ ] Log each invocation (tool name, path summary, duration, outcome).
-- [ ] **`query-sqlite.ts` tool**
-  - [ ] Implement TypeScript definitions:
-    - [ ] Name: `query_sqlite`.
-    - [ ] Description: per `SPEC.md` (read-only SQL access).
-    - [ ] Zod input schema: `{ db_path: string, sql: string, params?: (string | number | null)[] }`.
-  - [ ] Handler behaviour:
-    - [ ] Validate input with schema.
-    - [ ] Validate `db_path` using `path-guard`.
-    - [ ] Enforce SQL is `SELECT`-only (no mutating statements, no PRAGMAs).
-    - [ ] Use `sqlite-client` to run the query with parameter binding and timeout.
-    - [ ] Enforce row count limit (`SQLITE_MAX_ROWS`), returning:
-      - [ ] `rows: Record<string, unknown>[]`
-      - [ ] `row_count: number`
-      - [ ] `columns: string[]`
-      - [ ] Optional truncation indicator if applicable.
-    - [ ] Map all failure cases to structured errors:
-      - [ ] Non-SELECT statement → `NonSelectQueryError`.
-      - [ ] DB file not found / cannot open → dedicated error.
-      - [ ] Query timeout → `QueryTimeoutError` with partial/no results according to design.
-    - [ ] Log each invocation with an input summary (no sensitive data), duration, and outcome.
+- [x] **Tools index (`index.ts`)**
+  - [x] Implement `src/tools/index.ts` to:
+    - [x] Export a function that takes an `McpServer` instance and registers all tools.
+    - [x] Centralise the mapping from tool name to handler.
+- [x] **`read-file.ts` tool**
+  - [x] Implement TypeScript definitions:
+    - [x] Name: `read_file`.
+    - [x] Description: per `SPEC.md` (file reading, grounded access).
+    - [x] Zod input schema: `{ path: string }`.
+  - [x] Handler behaviour:
+    - [x] Validate input against schema.
+    - [x] Use `path-guard` to ensure path is inside `ALLOWED_DIRS`.
+    - [x] Check file existence and size before reading; enforce `MAX_FILE_BYTES`.
+    - [x] Detect MIME type (simple extension-based mapping is sufficient initially).
+    - [x] Read file as UTF-8, returning:
+      - [x] `content: string`
+      - [x] `size_bytes: number`
+      - [x] `mime_type: string`
+    - [x] Map failure conditions to structured errors:
+      - [x] File not found → 404-style error object.
+      - [x] Path outside allowlist → `PermissionError`.
+      - [x] File too large → `FileTooLargeError`.
+    - [x] Log each invocation (tool name, path summary, duration, outcome).
+- [x] **`query-sqlite.ts` tool**
+  - [x] Implement TypeScript definitions:
+    - [x] Name: `query_sqlite`.
+    - [x] Description: per `SPEC.md` (read-only SQL access).
+    - [x] Zod input schema: `{ db_path: string, sql: string, params?: (string | number | null)[] }`.
+  - [x] Handler behaviour:
+    - [x] Validate input with schema.
+    - [x] Validate `db_path` using `path-guard`.
+    - [x] Enforce SQL is `SELECT`-only (no mutating statements, no PRAGMAs).
+    - [x] Use `sqlite-client` to run the query with parameter binding and timeout.
+    - [x] Enforce row count limit (`SQLITE_MAX_ROWS`), returning:
+      - [x] `rows: Record<string, unknown>[]`
+      - [x] `row_count: number`
+      - [x] `columns: string[]`
+      - [x] Optional truncation indicator if applicable.
+    - [x] Map all failure cases to structured errors:
+      - [x] Non-SELECT statement → `NonSelectQueryError`.
+      - [x] DB file not found / cannot open → dedicated error.
+      - [x] Query timeout → `QueryTimeoutError` with partial/no results according to design.
+    - [x] Log each invocation with an input summary (no sensitive data), duration, and outcome.
 
 ## 5. Resources (`src/resources`)
 - [ ] **Resources index (`index.ts`)**
