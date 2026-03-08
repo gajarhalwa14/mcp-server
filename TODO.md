@@ -133,109 +133,109 @@
     - [x] Log each invocation with an input summary (no sensitive data), duration, and outcome.
 
 ## 5. Resources (`src/resources`)
-- [ ] **Resources index (`index.ts`)**
-  - [ ] Implement a registration function that attaches all resources to the `McpServer` instance.
-- [ ] **`server-config.ts` resource**
-  - [ ] Implement `config://server` resource that:
-    - [ ] Exposes non-sensitive configuration (transport choice, limits, allowed dirs, versions).
-    - [ ] Never exposes secrets (e.g. actual API keys or sensitive paths).
-    - [ ] Uses the validated `config` object from `src/config/env.ts`.
-- [ ] **`sqlite-schema.ts` resource**
-  - [ ] Implement `schema://sqlite/{db_path}` resource that:
-    - [ ] Parses and validates the `{db_path}` segment.
-    - [ ] Validates path with `path-guard`.
-    - [ ] Introspects the SQLite schema (table names, column names, column types).
-    - [ ] Returns a structured description consumable by the AI to build `query_sqlite` calls.
+- [x] **Resources index (`index.ts`)**
+  - [x] Implement a registration function that attaches all resources to the `McpServer` instance.
+- [x] **`server-config.ts` resource**
+  - [x] Implement `config://server` resource that:
+    - [x] Exposes non-sensitive configuration (transport choice, limits, allowed dirs, versions).
+    - [x] Never exposes secrets (e.g. actual API keys or sensitive paths).
+    - [x] Uses the validated `config` object from `src/config/env.ts`.
+- [x] **`sqlite-schema.ts` resource**
+  - [x] Implement `schema://sqlite/{db_path}` resource that:
+    - [x] Parses and validates the `{db_path}` segment.
+    - [x] Validates path with `path-guard`.
+    - [x] Introspects the SQLite schema (table names, column names, column types).
+    - [x] Returns a structured description consumable by the AI to build `query_sqlite` calls.
 
 ## 6. Prompts (`src/prompts`)
-- [ ] **Prompts index (`index.ts`)**
-  - [ ] Implement a registration function that attaches all prompts to the `McpServer` instance.
-- [ ] **`analyse-file.ts` prompt**
-  - [ ] Implement the `analyse-file` prompt template that:
-    - [ ] Guides the model to call `read_file` appropriately.
-    - [ ] Encourages structured analysis output (summary, anomalies, recommendations, etc.).
-- [ ] **`query-and-explain.ts` prompt**
-  - [ ] Implement the `query-and-explain` prompt template that:
-    - [ ] Guides the model to call `query_sqlite`, optionally multiple times.
-    - [ ] Instructs the model to explain results in plain language and highlight insights or comparisons.
- - [ ] **Prompt testing**
-  - [ ] Add lightweight unit tests or snapshot tests to ensure prompt templates render correctly given parameters.
+- [x] **Prompts index (`index.ts`)**
+  - [x] Implement a registration function that attaches all prompts to the `McpServer` instance.
+- [x] **`analyse-file.ts` prompt**
+  - [x] Implement the `analyse-file` prompt template that:
+    - [x] Guides the model to call `read_file` appropriately.
+    - [x] Encourages structured analysis output (summary, anomalies, recommendations, etc.).
+- [x] **`query-and-explain.ts` prompt**
+  - [x] Implement the `query-and-explain` prompt template that:
+    - [x] Guides the model to call `query_sqlite`, optionally multiple times.
+    - [x] Instructs the model to explain results in plain language and highlight insights or comparisons.
+- [x] **Prompt testing**
+  - [x] Add lightweight unit tests or snapshot tests to ensure prompt templates render correctly given parameters.
   - [ ] Manually exercise prompts via MCP Inspector to validate they guide the model toward correct tool usage.
 
 ## 7. Transport layer (`src/transport`)
-- [ ] **STDIO transport (`stdio.ts`)**
-  - [ ] Implement helper that:
-    - [ ] Configures `StdioServerTransport` from `@modelcontextprotocol/sdk`.
-    - [ ] Ensures all logs go to `stderr` only.
-    - [ ] Is suitable for local development, Claude Desktop, and MCP Inspector.
-- [ ] **HTTP transport (`http.ts`)**
-  - [ ] Implement helper that:
-    - [ ] Configures `StreamableHTTPServerTransport` from the MCP SDK.
-    - [ ] Uses `PORT` and `LOG_LEVEL` from config.
-    - [ ] Enforces CORS rules (configurable allowlist or sane defaults).
-    - [ ] Implements basic rate limiting (IP or token bucket, as appropriate).
-    - [ ] Supports streaming responses via SSE per MCP spec.
- - [ ] **Transport testing**
-  - [ ] Add unit tests for STDIO transport wiring where feasible (e.g. correct `McpServer` attachment).
-  - [ ] Add HTTP transport tests (or integration tests) that verify CORS headers, basic rate limiting, and streaming behaviour.
+- [x] **STDIO transport (`stdio.ts`)**
+  - [x] Implement helper that:
+    - [x] Configures `StdioServerTransport` from `@modelcontextprotocol/sdk`.
+    - [x] Ensures all logs go to `stderr` only.
+    - [x] Is suitable for local development, Claude Desktop, and MCP Inspector.
+- [x] **HTTP transport (`http.ts`)**
+  - [x] Implement helper that:
+    - [x] Configures `StreamableHTTPServerTransport` from the MCP SDK.
+    - [x] Uses `PORT` and `LOG_LEVEL` from config.
+    - [x] Enforces CORS rules (configurable allowlist or sane defaults).
+    - [x] Implements basic rate limiting (IP or token bucket, as appropriate).
+    - [x] Supports streaming responses via SSE per MCP spec.
+ - [x] **Transport testing**
+  - [x] Add unit tests for STDIO transport wiring where feasible (e.g. correct `McpServer` attachment).
+  - [x] Add HTTP transport tests (or integration tests) that verify CORS headers, basic rate limiting, and streaming behaviour.
 
 ## 8. Server entry point (`src/server.ts`)
-- [ ] **Server creation and wiring**
-  - [ ] Instantiate `McpServer` from `@modelcontextprotocol/sdk`.
-  - [ ] Import and register all tools, resources, and prompts via their index modules.
-  - [ ] Select transport based on validated env (`MCP_TRANSPORT`).
-  - [ ] Connect server to chosen transport (`server.connect(transport)`).
-- [ ] **Global error handling**
-  - [ ] Ensure unexpected exceptions are caught at the top level and translated into JSON-RPC error responses.
-  - [ ] Prevent the process from crashing on a single bad request.
-  - [ ] Ensure server exits early with clear logs on configuration errors.
- - [ ] **Server entry testing**
-  - [ ] Cover server wiring and error handling via integration tests that start the server with different `MCP_TRANSPORT` and config scenarios.
+- [x] **Server creation and wiring**
+  - [x] Instantiate `McpServer` from `@modelcontextprotocol/sdk`.
+  - [x] Import and register all tools, resources, and prompts via their index modules.
+  - [x] Select transport based on validated env (`MCP_TRANSPORT`).
+  - [x] Connect server to chosen transport (`server.connect(transport)`).
+- [x] **Global error handling**
+  - [x] Ensure unexpected exceptions are caught at the top level and translated into JSON-RPC error responses.
+  - [x] Prevent the process from crashing on a single bad request.
+  - [x] Ensure server exits early with clear logs on configuration errors.
+ - [x] **Server entry testing**
+  - [x] Cover server wiring and error handling via integration tests that start the server with different `MCP_TRANSPORT` and config scenarios.
 
 ## 9. Testing (`tests/`)
-- [ ] **Test infrastructure**
-  - [ ] Choose and configure test runner (Vitest or Jest) and add `test` script to `package.json`.
-  - [ ] Set up TypeScript-aware test config, including path aliases if used.
-- [ ] **Unit tests for config (`tests/config/`)**
-  - [ ] `env.test.ts`:
-    - [ ] Valid environment → returns typed config.
-    - [ ] Missing required variables → throws descriptive validation error.
-    - [ ] Invalid values (e.g. bad `MCP_TRANSPORT`, negative limits) → rejected with clear messages.
-- [ ] **Unit tests for utilities (`tests/utils/`)**
-  - [ ] `logger.test.ts`:
-    - [ ] Logs honour `LOG_LEVEL` thresholds and write only to `stderr`.
-  - [ ] `errors.test.ts`:
-    - [ ] Error instances expose stable codes/messages.
-  - [ ] `path-guard.test.ts`:
-    - [ ] Allowed vs disallowed paths, symlink handling, and relative path resolution.
-  - [ ] `sqlite-client.test.ts`:
-    - [ ] SELECT-only enforcement, timeout, row caps, and parameter binding.
-- [ ] **Unit tests for tools (`tests/tools/`)**
-  - [ ] `read-file.test.ts`:
-    - [ ] Test allowed vs disallowed paths (`path-guard` integration).
-    - [ ] Test max size enforcement and MIME detection.
-    - [ ] Test file-not-found and permission errors.
-  - [ ] `query-sqlite.test.ts`:
-    - [ ] Test `SELECT`-only enforcement.
-    - [ ] Test parameter binding and row limits.
-    - [ ] Test query timeout behaviour.
-    - [ ] Test DB-not-found and permission errors.
-- [ ] **Unit tests for resources (`tests/resources/`)**
-  - [ ] `server-config.test.ts`:
-    - [ ] Assert only non-sensitive config fields are exposed.
-  - [ ] `sqlite-schema.test.ts`:
-    - [ ] Assert schema output for a sample SQLite file matches expectations.
-- [ ] **Integration tests (`tests/integration/server.test.ts`)**
-  - [ ] Spin up the full server in a test harness.
-  - [ ] Send raw JSON-RPC 2.0 requests for:
-    - [ ] `read_file`
-    - [ ] `query_sqlite`
-    - [ ] Resource reads (`config://server`, `schema://sqlite/...`)
-  - [ ] Assert on structured responses, including error cases.
-  - [ ] Verify correct logging behaviour (no contamination of STDIO data channel in STDIO mode).
-  - [ ] Verify HTTP mode responses include correct CORS headers and handle rate limiting as configured.
- - [ ] **Test coverage & robustness**
-  - [ ] Track code coverage and aim for high coverage on tools, resources, config, and utilities.
+- [x] **Test infrastructure**
+  - [x] Choose and configure test runner (Vitest or Jest) and add `test` script to `package.json`.
+  - [x] Set up TypeScript-aware test config, including path aliases if used.
+- [x] **Unit tests for config (`tests/config/`)**
+  - [x] `env.test.ts`:
+    - [x] Valid environment → returns typed config.
+    - [x] Missing required variables → throws descriptive validation error.
+    - [x] Invalid values (e.g. bad `MCP_TRANSPORT`, negative limits) → rejected with clear messages.
+- [x] **Unit tests for utilities (`tests/utils/`)**
+  - [x] `logger.test.ts`:
+    - [x] Logs honour `LOG_LEVEL` thresholds and write only to `stderr`.
+  - [x] `errors.test.ts`:
+    - [x] Error instances expose stable codes/messages.
+  - [x] `path-guard.test.ts`:
+    - [x] Allowed vs disallowed paths, symlink handling, and relative path resolution.
+  - [x] `sqlite-client.test.ts`:
+    - [x] SELECT-only enforcement, timeout, row caps, and parameter binding.
+- [x] **Unit tests for tools (`tests/tools/`)**
+  - [x] `read-file.test.ts`:
+    - [x] Test allowed vs disallowed paths (`path-guard` integration).
+    - [x] Test max size enforcement and MIME detection.
+    - [x] Test file-not-found and permission errors.
+  - [x] `query-sqlite.test.ts`:
+    - [x] Test `SELECT`-only enforcement.
+    - [x] Test parameter binding and row limits.
+    - [x] Test query timeout behaviour.
+    - [x] Test DB-not-found and permission errors.
+- [x] **Unit tests for resources (`tests/resources/`)**
+  - [x] `server-config.test.ts`:
+    - [x] Assert only non-sensitive config fields are exposed.
+  - [x] `sqlite-schema.test.ts`:
+    - [x] Assert schema output for a sample SQLite file matches expectations.
+- [x] **Integration tests (`tests/integration/server.test.ts`)**
+  - [x] Spin up the full server in a test harness.
+  - [x] Send raw JSON-RPC 2.0 requests for:
+    - [x] `read_file`
+    - [x] `query_sqlite`
+    - [x] Resource reads (`config://server`, `schema://sqlite/...`)
+  - [x] Assert on structured responses, including error cases.
+  - [x] Verify correct logging behaviour (no contamination of STDIO data channel in STDIO mode).
+  - [x] Verify HTTP mode responses include correct CORS headers and handle rate limiting as configured.
+ - [x] **Test coverage & robustness**
+  - [x] Track code coverage and aim for high coverage on tools, resources, config, and utilities.
   - [ ] Add regression tests when bugs are found to prevent reintroductions.
 
 ## 10. Scripts and developer experience

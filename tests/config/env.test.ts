@@ -54,5 +54,28 @@ describe("loadConfig", () => {
       } as unknown as NodeJS.ProcessEnv)
     ).toThrow(/Invalid environment configuration/i);
   });
+
+  it("rejects negative limits and invalid PORT", () => {
+    expect(() =>
+      loadConfig({
+        ALLOWED_DIRS: "/data",
+        MAX_FILE_BYTES: "-1"
+      } as NodeJS.ProcessEnv)
+    ).toThrow(/Invalid environment configuration/i);
+
+    expect(() =>
+      loadConfig({
+        ALLOWED_DIRS: "/data",
+        PORT: "99999"
+      } as NodeJS.ProcessEnv)
+    ).toThrow(/Invalid environment configuration/i);
+
+    expect(() =>
+      loadConfig({
+        ALLOWED_DIRS: "/data",
+        SQLITE_MAX_ROWS: "0"
+      } as NodeJS.ProcessEnv)
+    ).toThrow(/Invalid environment configuration/i);
+  });
 });
 
