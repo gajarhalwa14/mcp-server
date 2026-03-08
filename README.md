@@ -62,7 +62,7 @@ ALLOWED_DIRS=/path/to/your/data,/path/to/another/dir
 npm run build
 npm run dev      # Development (tsx, hot reload)
 # or
-npm run start    # Production (node build/server.js)
+npm run start    # Production (node build/src/server.js)
 ```
 
 ## Configuration
@@ -86,7 +86,7 @@ Add the server to Claude Desktop's config (`~/Library/Application Support/Claude
   "mcpServers": {
     "mcp-server": {
       "command": "node",
-      "args": ["/absolute/path/to/mcp-server/build/server.js"],
+      "args": ["/absolute/path/to/mcp-server/build/src/server.js"],
       "env": {
         "ALLOWED_DIRS": "/path/to/your/data"
       }
@@ -123,7 +123,7 @@ To debug the server with [MCP Inspector](https://github.com/modelcontextprotocol
 npm run dev
 ```
 
-Then in MCP Inspector, add a server with command `node` and args `["build/server.js"]`, or use the `inspect` script when available.
+Then in MCP Inspector, add a server with command `node` and args `["build/src/server.js"]`, or use the `inspect` script when available.
 
 ## Documentation
 

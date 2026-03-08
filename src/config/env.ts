@@ -13,7 +13,7 @@ import {
   type McpTransport
 } from "./constants.js";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const EnvSchema = z.object({
   MCP_TRANSPORT: z

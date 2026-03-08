@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { loadConfig, type AppConfig } from "./config/env.js";
 import { createLogger } from "./utils/logger.js";
@@ -66,7 +68,6 @@ export async function start(
     if (config.transport === "stdio") {
       const transport = createTransport(config, logger);
       await server.connect(transport);
-      await transport.start();
       logger.info("MCP server running in STDIO mode");
       return undefined;
     }
@@ -90,7 +91,14 @@ export async function start(
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+function isMainModule(): boolean {
+  if (!process.argv[1]) return false;
+  const entry = resolve(process.argv[1]);
+  const self = fileURLToPath(import.meta.url);
+  return entry === self;
+}
+
+if (isMainModule()) {
   process.on("unhandledRejection", (reason) => {
     console.error("Unhandled rejection:", reason);
     process.exit(1);
